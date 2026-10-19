@@ -60,12 +60,15 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Brand Column */}
           <div className="lg:col-span-4 flex flex-col gap-4">
             <div className="flex items-center gap-2.5">
-              <img
-                alt="Code Mitra Logo"
-                className="h-7 w-auto object-contain"
-                src="https://lh3.googleusercontent.com/aida/AEtjO1UweIpUl00mT4cF2IWUDlUX5dSlkGKQ4BgrVnA-i9BsZ-kTFG2dJBdsUQfvhWxovWKePpbUlpAZk8X32m27xLnbXaOmRL7DKa0mmndfAHSGyeG3frwGEyzGD6W6TqwJdvx2bPf-nJf2S_WazvWggeiFWVy4iAg338SAniBIxYjaqI0fG35zCPKHIa6eU22vjKHeqUS0VCHN0a6Iklvvb55z9KDa_AmAoP-N3mq0_EMYhQyc_fdqnSThdFc"
-              />
-              <span className="font-semibold text-xl text-[#dae2fd]">Code Mitra</span>
+              <div className="w-8 h-8 rounded-xl overflow-hidden border border-cyan-400/50 shadow-[0_0_12px_rgba(76,215,246,0.3)] flex items-center justify-center shrink-0 bg-[#060e20]">
+                <img
+                  alt="Code Mitra Digital Logo"
+                  className="w-full h-full object-cover"
+                  src="/src/assets/images/codemitra_icon_1792431879490.jpg"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <span className="font-bold text-xl text-white tracking-tight">Code Mitra</span>
             </div>
             <p className="text-xs sm:text-sm text-[#c7c4d8] max-w-sm leading-relaxed">
               High-velocity engineering studio specializing in mission-critical web platforms, AI integration, and scalable digital architectures for ambitious founders worldwide.

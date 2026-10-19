@@ -10,11 +10,11 @@ import { HeroSection } from './components/HeroSection';
 import { PricingCards } from './components/PricingCards';
 import { ComparisonTable } from './components/ComparisonTable';
 import { AddOnsSection } from './components/AddOnsSection';
-import { ScopeCalculatorModal } from './components/ScopeCalculatorModal';
 import { SourceHandoverSection } from './components/SourceHandoverSection';
 import { FaqSection } from './components/FaqSection';
 import { BottomCta } from './components/BottomCta';
 import { Footer } from './components/Footer';
+import { ScopeCalculatorModal } from './components/ScopeCalculatorModal';
 import { DiscoveryCallModal } from './components/DiscoveryCallModal';
 import { WhatsAppDrawer } from './components/WhatsAppDrawer';
 import { PortfolioModal } from './components/PortfolioModal';
@@ -24,254 +24,238 @@ import { ProcessModal } from './components/ProcessModal';
 import { LegalModal } from './components/LegalModal';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>('pricing');
+  const [currentTab, setCurrentTab] = useState<string>('packages');
   const [currency, setCurrency] = useState<Currency>(CURRENCIES.INR);
 
-  // Modals state
-  const [discoveryModalOpen, setDiscoveryModalOpen] = useState(false);
-  const [selectedTierForBooking, setSelectedTierForBooking] = useState('dynamic');
-  const [scopeNoteForBooking, setScopeNoteForBooking] = useState('');
+  // Modals & Drawers state
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+  const [calculatorInitialTier, setCalculatorInitialTier] = useState<string>('static');
 
-  const [whatsAppOpen, setWhatsAppOpen] = useState(false);
-  const [whatsAppMessage, setWhatsAppMessage] = useState('');
+  const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
+  const [discoveryInitialTier, setDiscoveryInitialTier] = useState<string>('Dynamic Website');
 
-  const [portfolioOpen, setPortfolioOpen] = useState(false);
-  const [selectedPortfolioId, setSelectedPortfolioId] = useState('cafe-bella');
+  const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
+  const [whatsAppInitialMessage, setWhatsAppInitialMessage] = useState<string | undefined>(undefined);
 
-  const [ndaOpen, setNdaOpen] = useState(false);
-  const [clientPortalOpen, setClientPortalOpen] = useState(false);
-  const [processOpen, setProcessOpen] = useState(false);
-  const [legalType, setLegalType] = useState<'privacy' | 'terms' | null>(null);
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
+  const [portfolioSelectedId, setPortfolioSelectedId] = useState<string | undefined>(undefined);
 
-  const [calculatorOpen, setCalculatorOpen] = useState(false);
-  const [calculatorInitialTier, setCalculatorInitialTier] = useState('dynamic');
-  const [calculatorInitialAddon, setCalculatorInitialAddon] = useState<string | undefined>(undefined);
+  const [isNdaOpen, setIsNdaOpen] = useState(false);
+  const [isPortalOpen, setIsPortalOpen] = useState(false);
+  const [isProcessOpen, setIsProcessOpen] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | null>(null);
 
-  // Navigation router
   const handleNavigate = (tabId: string) => {
     setCurrentTab(tabId);
-    if (tabId === 'pricing') {
+    if (tabId === 'portfolio') {
+      setIsPortfolioOpen(true);
+      return;
+    }
+    if (tabId === 'process') {
+      setIsProcessOpen(true);
+      return;
+    }
+    if (tabId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (tabId === 'addons') {
+      return;
+    }
+    if (tabId === 'services' || tabId === 'pricing' || tabId === 'packages') {
+      const el = document.getElementById('packages') || document.getElementById('pricing');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+    if (tabId === 'addons') {
       const el = document.getElementById('addons-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    } else if (tabId === 'faq') {
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+    if (tabId === 'faq') {
       const el = document.getElementById('faq-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    } else if (tabId === 'portfolio') {
-      setSelectedPortfolioId('cafe-bella');
-      setPortfolioOpen(true);
-    } else if (tabId === 'process') {
-      setProcessOpen(true);
-    } else if (tabId === 'services') {
-      const el = document.getElementById('comparison-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
+    const element = document.getElementById(tabId) || document.getElementById(`${tabId}-section`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  const handleOpenDiscoveryCall = (tierId = 'dynamic', note = '') => {
-    setSelectedTierForBooking(tierId);
-    setScopeNoteForBooking(note);
-    setDiscoveryModalOpen(true);
+  const handleOpenDiscovery = (preferredTier?: string) => {
+    if (preferredTier) {
+      setDiscoveryInitialTier(preferredTier);
+    }
+    setIsDiscoveryOpen(true);
   };
 
-  const handleOpenWhatsApp = (message = '') => {
-    setWhatsAppMessage(message);
-    setWhatsAppOpen(true);
+  const handleOpenWhatsApp = (customMessage?: string) => {
+    setWhatsAppInitialMessage(customMessage);
+    setIsWhatsAppOpen(true);
   };
 
-  const handleViewBlueprint = (blueprintId: string) => {
-    setSelectedPortfolioId(blueprintId);
-    setPortfolioOpen(true);
-  };
-
-  const handleOpenCalculatorWithItem = (addonId: string) => {
-    setCalculatorInitialAddon(addonId);
-    setCalculatorOpen(true);
-  };
-
-  const handleBookCallWithScope = (scopeSummary: string) => {
-    setCalculatorOpen(false);
-    handleOpenDiscoveryCall('dynamic', scopeSummary);
-  };
-
-  const handleSendScopeToWhatsApp = (text: string) => {
-    setCalculatorOpen(false);
-    handleOpenWhatsApp(text);
+  const handleViewBlueprint = (tierId: string) => {
+    setPortfolioSelectedId(tierId);
+    setIsPortfolioOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] font-sans selection:bg-[#4f46e5] selection:text-white flex flex-col">
-      {/* 1. Sticky Navigation Header */}
+    <div className="bg-[#0b1326] text-[#dae2fd] font-sans antialiased min-h-screen selection:bg-[#4f46e5] selection:text-white">
+      {/* 1. TOP HEADER (Responsive with Repo & Currency) */}
       <Header
         currentTab={currentTab}
         onNavigate={handleNavigate}
         currency={currency}
         onSelectCurrency={setCurrency}
         onOpenWhatsApp={() => handleOpenWhatsApp()}
-        onOpenDiscoveryCall={(tier) => handleOpenDiscoveryCall(tier || 'dynamic')}
-        onOpenPortal={() => setClientPortalOpen(true)}
+        onOpenDiscoveryCall={handleOpenDiscovery}
+        onOpenPortal={() => setIsPortalOpen(true)}
       />
 
-      {/* Main Content Body */}
-      <main className="w-full pt-16 sm:pt-20 pb-16 md:pb-0 flex-1">
-        {/* Hero Section with Trust Metrics */}
+      {/* 2. MAIN CONTENT - Generous top padding (pt-20 sm:pt-24 md:pt-28) solves upper lines overlapping bug */}
+      <main className="w-full pt-20 sm:pt-24 md:pt-28 bg-[#0b1326] min-h-screen">
+        {/* HERO SECTION with digital workspace photo & quick overview */}
         <HeroSection
+          currency={currency}
           onScrollToAddons={() => handleNavigate('addons')}
-          onOpenCalculator={() => setCalculatorOpen(true)}
+          onOpenCalculator={() => setIsCalculatorOpen(true)}
+          onOpenDiscoveryCall={handleOpenDiscovery}
         />
 
-        {/* 3 Main Pricing Packages (Bento Stack) */}
+        {/* 3 PRICING TIERS (Static ₹10K, Dynamic ₹20K, E-Commerce ₹30K) with digital preview photos */}
         <PricingCards
           currency={currency}
-          onSelectTier={(tierId) => handleOpenDiscoveryCall(tierId)}
+          onSelectTier={handleOpenDiscovery}
           onViewBlueprint={handleViewBlueprint}
+          onOpenDiscoveryCall={handleOpenDiscovery}
         />
 
-        {/* Detailed Package Comparison Table */}
+        {/* FULL 27-ROW GRANULAR COMPARISON TABLE */}
         <ComparisonTable
           currency={currency}
-          onSelectTier={(tierId) => handleOpenDiscoveryCall(tierId)}
+          onSelectTier={handleOpenDiscovery}
         />
 
-        {/* Add-on Services & Scope Extensions */}
+        {/* ADDITIONAL SERVICES & MODULAR RATE CARD */}
         <AddOnsSection
           currency={currency}
-          onOpenCalculatorWithItem={handleOpenCalculatorWithItem}
-          onOpenCalculator={() => setCalculatorOpen(true)}
+          onOpenCalculator={() => setIsCalculatorOpen(true)}
         />
 
-        {/* Why 100% Full Source Code Handover Matters */}
+        {/* 100% UNCONDITIONAL FULL SOURCE CODE HANDOVER with digital Git console photo */}
         <SourceHandoverSection
-          onOpenNdaModal={() => setNdaOpen(true)}
+          onOpenNdaModal={() => setIsNdaOpen(true)}
         />
 
-        {/* Frequently Asked Questions */}
+        {/* FREQUENTLY ASKED QUESTIONS */}
         <FaqSection
           onOpenWhatsAppQuestion={(q) =>
-            handleOpenWhatsApp(q ? `I have a question about: "${q}"` : '')
+            handleOpenWhatsApp(
+              q
+                ? `Hi Code Mitra, I have a specific question about: "${q}"`
+                : 'Hi Code Mitra, I have a technical question regarding website development scope.'
+            )
           }
         />
 
-        {/* Bottom Fast-Track Conversion CTA */}
+        {/* BOTTOM CALL-TO-ACTION */}
         <BottomCta
-          onOpenWhatsApp={() => handleOpenWhatsApp()}
-          onOpenDiscoveryCall={() => handleOpenDiscoveryCall('dynamic')}
+          onOpenWhatsApp={() =>
+            handleOpenWhatsApp('Hi Code Mitra, I would like to fast-track a proposal for my website.')
+          }
+          onOpenDiscoveryCall={() => handleOpenDiscovery()}
         />
       </main>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <Footer
         onNavigate={handleNavigate}
         onOpenWhatsApp={() => handleOpenWhatsApp()}
-        onOpenDiscoveryCall={() => handleOpenDiscoveryCall('dynamic')}
-        onOpenNdaModal={() => setNdaOpen(true)}
-        onOpenLegalModal={(type) => setLegalType(type)}
+        onOpenDiscoveryCall={() => handleOpenDiscovery()}
+        onOpenNdaModal={() => setIsNdaOpen(true)}
+        onOpenLegalModal={(type) => setLegalModalType(type)}
       />
 
-      {/* Mobile Sticky Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[#0b1326]/95 backdrop-blur-xl border-t border-slate-800 shadow-[0_-4px_16px_rgba(0,0,0,0.5)]">
-        <div className="h-14 max-w-lg mx-auto px-2 flex items-center justify-around">
-          <button
-            onClick={() => handleNavigate('pricing')}
-            className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono cursor-pointer transition ${
-              currentTab === 'pricing' ? 'text-[#c3c0ff] font-bold' : 'text-[#918fa1] hover:text-[#dae2fd]'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[20px]">payments</span>
-            <span>Pricing</span>
-          </button>
-
-          <button
-            onClick={() => setCalculatorOpen(true)}
-            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#4cd7f6] cursor-pointer hover:text-white transition"
-          >
-            <span className="material-symbols-outlined text-[20px]">calculate</span>
-            <span>Estimator</span>
-          </button>
-
-          {/* Prominent Repo & Client Portal Button on Mobile */}
-          <button
-            onClick={() => setClientPortalOpen(true)}
-            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#4edea3] cursor-pointer hover:text-white transition group"
-          >
-            <div className="relative">
-              <span className="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">terminal</span>
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#4edea3]"></span>
-            </div>
-            <span className="font-bold">Repo Portal</span>
-          </button>
-
-          <button
-            onClick={() => handleOpenWhatsApp()}
-            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#918fa1] hover:text-[#4edea3] cursor-pointer transition"
-          >
-            <span className="material-symbols-outlined text-[20px]">chat</span>
-            <span>WhatsApp</span>
-          </button>
-
-          <button
-            onClick={() => handleOpenDiscoveryCall('dynamic')}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#4f46e5] text-white text-[11px] font-semibold cursor-pointer shadow-md active:scale-95 transition"
-          >
-            <span>Book</span>
-            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Modals & Drawers */}
-      <DiscoveryCallModal
-        isOpen={discoveryModalOpen}
-        onClose={() => setDiscoveryModalOpen(false)}
-        currency={currency}
-        initialTier={selectedTierForBooking}
-        initialScopeNote={scopeNoteForBooking}
-      />
-
-      <WhatsAppDrawer
-        isOpen={whatsAppOpen}
-        onClose={() => setWhatsAppOpen(false)}
-        initialMessage={whatsAppMessage}
-      />
-
-      <PortfolioModal
-        isOpen={portfolioOpen}
-        onClose={() => setPortfolioOpen(false)}
-        selectedId={selectedPortfolioId}
-        onBookDiscovery={(tier) => handleOpenDiscoveryCall(tier.toLowerCase().includes('static') ? 'static' : tier.toLowerCase().includes('dynamic') ? 'dynamic' : 'ecommerce')}
-      />
-
-      <NdaModal
-        isOpen={ndaOpen}
-        onClose={() => setNdaOpen(false)}
-      />
-
+      {/* MODALS & DRAWERS */}
+      {/* Client Repository & IP Handover Portal */}
       <ClientPortalModal
-        isOpen={clientPortalOpen}
-        onClose={() => setClientPortalOpen(false)}
-        onOpenDiscoveryCall={() => handleOpenDiscoveryCall('dynamic')}
+        isOpen={isPortalOpen}
+        onClose={() => setIsPortalOpen(false)}
+        onOpenDiscoveryCall={() => {
+          setIsPortalOpen(false);
+          handleOpenDiscovery();
+        }}
       />
 
-      <ProcessModal
-        isOpen={processOpen}
-        onClose={() => setProcessOpen(false)}
-        onOpenDiscoveryCall={() => handleOpenDiscoveryCall('dynamic')}
-      />
-
-      <LegalModal
-        type={legalType}
-        onClose={() => setLegalType(null)}
-      />
-
+      {/* Interactive Scope Calculator */}
       <ScopeCalculatorModal
-        isOpen={calculatorOpen}
-        onClose={() => setCalculatorOpen(false)}
+        isOpen={isCalculatorOpen}
+        onClose={() => setIsCalculatorOpen(false)}
         currency={currency}
         initialTier={calculatorInitialTier}
-        initialAddon={calculatorInitialAddon}
-        onBookCallWithScope={handleBookCallWithScope}
-        onSendToWhatsApp={handleSendScopeToWhatsApp}
+        onBookCallWithScope={(_summary: string) => {
+          setIsCalculatorOpen(false);
+          setIsDiscoveryOpen(true);
+        }}
+        onSendToWhatsApp={(summaryText: string) => {
+          setIsCalculatorOpen(false);
+          handleOpenWhatsApp(
+            `Hi Code Mitra, here is my calculated project scope estimate:\n\n${summaryText}\n\nCould we discuss delivery timeline and kicking off?`
+          );
+        }}
+      />
+
+      {/* Discovery Call Consultation Modal */}
+      <DiscoveryCallModal
+        isOpen={isDiscoveryOpen}
+        onClose={() => setIsDiscoveryOpen(false)}
+        currency={currency}
+        initialTier={discoveryInitialTier}
+      />
+
+      {/* Technical WhatsApp Chat Desk */}
+      <WhatsAppDrawer
+        isOpen={isWhatsAppOpen}
+        onClose={() => setIsWhatsAppOpen(false)}
+        initialMessage={whatsAppInitialMessage}
+      />
+
+      {/* Case Study Portfolio Modal */}
+      <PortfolioModal
+        isOpen={isPortfolioOpen}
+        onClose={() => setIsPortfolioOpen(false)}
+        selectedId={portfolioSelectedId}
+        onBookDiscovery={(tierTitle) => {
+          setIsPortfolioOpen(false);
+          handleOpenDiscovery(tierTitle);
+        }}
+      />
+
+      {/* Mutual NDA & IP Rights Modal */}
+      <NdaModal
+        isOpen={isNdaOpen}
+        onClose={() => setIsNdaOpen(false)}
+      />
+
+      {/* 14-Day Delivery Sprint Process Modal */}
+      <ProcessModal
+        isOpen={isProcessOpen}
+        onClose={() => setIsProcessOpen(false)}
+        onOpenDiscoveryCall={() => {
+          setIsProcessOpen(false);
+          handleOpenDiscovery();
+        }}
+      />
+
+      {/* Legal & Terms Modal */}
+      <LegalModal
+        type={legalModalType}
+        onClose={() => setLegalModalType(null)}
       />
     </div>
   );

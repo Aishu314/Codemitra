@@ -11,14 +11,16 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, onClose }) => {
   const isPrivacy = type === 'privacy';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl rounded-2xl bg-[#131b2e] border border-slate-700 shadow-2xl p-6 sm:p-8 my-8 text-[#dae2fd]">
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-[#918fa1] hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[24px]">close</span>
-        </button>
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md">
+      <div className="min-h-full flex items-start sm:items-center justify-center p-3 sm:p-6">
+        <div className="relative w-full max-w-2xl rounded-2xl bg-[#131b2e] border border-slate-700 shadow-2xl p-5 sm:p-8 my-6 sm:my-8 text-[#dae2fd]">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 text-[#918fa1] hover:text-white p-2 rounded-lg bg-[#171f33] sm:bg-transparent hover:bg-slate-800 transition cursor-pointer z-10"
+            aria-label="Close modal"
+          >
+            <span className="material-symbols-outlined text-[22px]">close</span>
+          </button>
 
         <div className="flex items-center gap-2 text-[#4cd7f6] font-mono text-xs font-semibold">
           <span className="material-symbols-outlined text-[18px]">policy</span>
@@ -72,5 +74,6 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, onClose }) => {
         </div>
       </div>
     </div>
+  </div>
   );
 };

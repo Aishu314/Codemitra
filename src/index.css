@@ -105,3 +105,152 @@ pre::-webkit-scrollbar-track,
 div::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   ATTRACTIVE DIGITAL TRANSITIONS (Swipe Up / Down / Left / Right)
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes swipeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swipeDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swipeLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes swipeRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes digitalPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(76, 215, 246, 0.2), 0 0 2px rgba(76, 215, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(76, 215, 246, 0.45), 0 0 8px rgba(76, 215, 246, 0.8);
+  }
+}
+
+@keyframes cyberScanline {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes digitalShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Utility Transition Classes */
+.animate-swipe-up {
+  animation: swipeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-swipe-down {
+  animation: swipeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-swipe-left {
+  animation: swipeLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-swipe-right {
+  animation: swipeRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+.digital-glow-pulse {
+  animation: digitalPulseGlow 3s ease-in-out infinite;
+}
+
+/* Interactive Card Transitions */
+.digital-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease, background-color 0.25s ease;
+}
+
+.digital-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Cyber Shimmer Light Sweep */
+.cyber-shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(76, 215, 246, 0.12), transparent);
+  transform: translateX(-150%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.cyber-shimmer-sweep:hover::after {
+  animation: digitalShimmer 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+

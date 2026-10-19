@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { FAQS } from '../data/pricingData';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronDown, MessageSquare, Search, HelpCircle } from 'lucide-react';
 
 interface FaqSectionProps {
   onOpenWhatsAppQuestion: (question?: string) => void;
@@ -27,8 +29,13 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenWhatsAppQuestion }
 
   return (
     <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 sm:py-20" id="faq-section">
-      {/* Title */}
-      <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+      {/* Title - Swipe Up */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-50px' }}
+        className="text-center max-w-2xl mx-auto mb-8 sm:mb-10"
+      >
         <span className="font-mono text-xs text-[#4cd7f6] uppercase tracking-wider font-semibold">
           Got Questions?
         </span>
@@ -38,7 +45,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenWhatsAppQuestion }
         <p className="mt-1 text-sm sm:text-base text-[#c7c4d8]">
           Straight answers regarding billing terms, technical dependencies, and handover protocols.
         </p>
-      </div>
+      </motion.div>
 
       {/* Filter and Search Bar */}
       <div className="max-w-3xl mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -67,20 +74,22 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenWhatsAppQuestion }
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-[#171f33] border border-slate-700/80 rounded-lg px-3 py-1.5 pl-8 text-xs text-[#dae2fd] focus:outline-none focus:ring-1 focus:ring-[#4cd7f6] placeholder:text-[#918fa1]"
           />
-          <span className="material-symbols-outlined absolute left-2 top-2 text-[16px] text-[#918fa1]">
-            search
-          </span>
+          <Search className="w-4 h-4 text-[#918fa1] absolute left-2.5 top-2.5" />
         </div>
       </div>
 
       {/* Accordion Container */}
       <div className="max-w-3xl mx-auto flex flex-col gap-3">
-        {filteredFaqs.map((faq) => {
+        {filteredFaqs.map((faq, idx) => {
           const isOpen = openId === faq.id;
 
           return (
-            <div
+            <motion.div
               key={faq.id}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.05 }}
               className="rounded-xl bg-[#171f33] border border-slate-800/80 overflow-hidden transition duration-150"
             >
               <button
@@ -92,32 +101,42 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenWhatsAppQuestion }
                   <span className="font-mono text-xs text-[#4cd7f6]">{faq.category}:</span>
                   <span>{faq.question}</span>
                 </div>
-                <span
-                  className={`material-symbols-outlined text-[#4cd7f6] transition-transform duration-200 shrink-0 ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
+                <motion.div
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="shrink-0 text-[#4cd7f6]"
                 >
-                  expand_more
-                </span>
+                  <ChevronDown className="w-5 h-5" />
+                </motion.div>
               </button>
 
-              {isOpen && (
-                <div className="p-4 sm:p-5 pt-0 text-sm text-[#c7c4d8] leading-relaxed border-t border-slate-800/40 mt-1">
-                  <p>{faq.answer}</p>
-                  <div className="mt-3 pt-2.5 flex items-center justify-between text-xs font-mono text-[#918fa1]">
-                    <span>Need specific guidance on this?</span>
-                    <button
-                      type="button"
-                      onClick={() => onOpenWhatsAppQuestion(faq.question)}
-                      className="text-[#4edea3] hover:underline inline-flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>Ask Lead Architect</span>
-                      <span className="material-symbols-outlined text-[13px]">chat</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 sm:p-5 pt-0 text-sm text-[#c7c4d8] leading-relaxed border-t border-slate-800/40 mt-1">
+                      <p>{faq.answer}</p>
+                      <div className="mt-3 pt-2.5 flex items-center justify-between text-xs font-mono text-[#918fa1]">
+                        <span>Need specific guidance on this?</span>
+                        <button
+                          type="button"
+                          onClick={() => onOpenWhatsAppQuestion(faq.question)}
+                          className="text-[#4edea3] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>Ask Lead Architect</span>
+                          <MessageSquare className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           );
         })}
 
@@ -130,14 +149,16 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenWhatsAppQuestion }
 
       {/* Quick query trigger */}
       <div className="mt-8 text-center">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           type="button"
           onClick={() => onOpenWhatsAppQuestion()}
           className="inline-flex items-center gap-2 text-xs font-mono text-[#4edea3] hover:text-white transition px-4 py-2 rounded-lg bg-[#171f33] border border-[#4edea3]/30 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[16px]">help_center</span>
+          <HelpCircle className="w-4 h-4 text-[#4edea3]" />
           <span>Don't see your question? Chat directly with Bangalore engineering leads</span>
-        </button>
+        </motion.button>
       </div>
     </section>
   );
