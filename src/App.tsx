@@ -114,7 +114,7 @@ export default function App() {
       />
 
       {/* Main Content Body */}
-      <main className="w-full pt-16 sm:pt-20 flex-1">
+      <main className="w-full pt-16 sm:pt-20 pb-16 md:pb-0 flex-1">
         {/* Hero Section with Trust Metrics */}
         <HeroSection
           onScrollToAddons={() => handleNavigate('addons')}
@@ -169,15 +169,55 @@ export default function App() {
         onOpenLegalModal={(type) => setLegalType(type)}
       />
 
-      {/* Interactive Floating Quick Scope Pill on mobile */}
-      <div className="fixed bottom-4 right-4 z-40 sm:hidden">
-        <button
-          onClick={() => setCalculatorOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#4f46e5] text-white shadow-2xl border border-indigo-400/30 text-xs font-semibold cursor-pointer active:scale-95 transition"
-        >
-          <span className="material-symbols-outlined text-[16px]">calculate</span>
-          <span>Estimate Scope</span>
-        </button>
+      {/* Mobile Sticky Bottom Navigation Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[#0b1326]/95 backdrop-blur-xl border-t border-slate-800 shadow-[0_-4px_16px_rgba(0,0,0,0.5)]">
+        <div className="h-14 max-w-lg mx-auto px-2 flex items-center justify-around">
+          <button
+            onClick={() => handleNavigate('pricing')}
+            className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono cursor-pointer transition ${
+              currentTab === 'pricing' ? 'text-[#c3c0ff] font-bold' : 'text-[#918fa1] hover:text-[#dae2fd]'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[20px]">payments</span>
+            <span>Pricing</span>
+          </button>
+
+          <button
+            onClick={() => setCalculatorOpen(true)}
+            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#4cd7f6] cursor-pointer hover:text-white transition"
+          >
+            <span className="material-symbols-outlined text-[20px]">calculate</span>
+            <span>Estimator</span>
+          </button>
+
+          {/* Prominent Repo & Client Portal Button on Mobile */}
+          <button
+            onClick={() => setClientPortalOpen(true)}
+            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#4edea3] cursor-pointer hover:text-white transition group"
+          >
+            <div className="relative">
+              <span className="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">terminal</span>
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#4edea3]"></span>
+            </div>
+            <span className="font-bold">Repo Portal</span>
+          </button>
+
+          <button
+            onClick={() => handleOpenWhatsApp()}
+            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-mono text-[#918fa1] hover:text-[#4edea3] cursor-pointer transition"
+          >
+            <span className="material-symbols-outlined text-[20px]">chat</span>
+            <span>WhatsApp</span>
+          </button>
+
+          <button
+            onClick={() => handleOpenDiscoveryCall('dynamic')}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#4f46e5] text-white text-[11px] font-semibold cursor-pointer shadow-md active:scale-95 transition"
+          >
+            <span>Book</span>
+            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </button>
+        </div>
       </div>
 
       {/* Modals & Drawers */}
