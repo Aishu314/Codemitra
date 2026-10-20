@@ -2,6 +2,7 @@ import React from 'react';
 import { Currency } from '../data/pricingData';
 import { motion } from 'motion/react';
 import { ShieldCheck, ArrowRight, Calculator, Sparkles, Terminal } from 'lucide-react';
+import { heroWebDev } from '../assets/images';
 
 interface HeroSectionProps {
   currency: Currency;
@@ -68,10 +69,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         >
           <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#060e20]">
             <img
-              src="/src/assets/images/hero_web_dev_1792431343087.jpg"
+              src={heroWebDev}
               alt="Code Mitra Web Development Engineering Studio"
-              referrerPolicy="no-referrer"
               className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+              onError={(e) => {
+                e.currentTarget.src = '/images/hero_web_dev_1792431343087.jpg';
+              }}
             />
             {/* Ambient Overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0b1326] via-[#0b1326]/40 to-transparent"></div>

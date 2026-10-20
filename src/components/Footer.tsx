@@ -1,4 +1,5 @@
 import React from 'react';
+import { codemitraIcon } from '../assets/images';
 
 interface FooterProps {
   onNavigate: (tabId: string) => void;
@@ -64,8 +65,10 @@ export const Footer: React.FC<FooterProps> = ({
                 <img
                   alt="Code Mitra Digital Logo"
                   className="w-full h-full object-cover"
-                  src="/src/assets/images/codemitra_icon_1792431879490.jpg"
-                  referrerPolicy="no-referrer"
+                  src={codemitraIcon}
+                  onError={(e) => {
+                    e.currentTarget.src = '/codemitra_icon.jpg';
+                  }}
                 />
               </div>
               <span className="font-bold text-xl text-white tracking-tight">Code Mitra</span>

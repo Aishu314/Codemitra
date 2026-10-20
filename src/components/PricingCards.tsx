@@ -2,6 +2,7 @@ import React from 'react';
 import { Currency } from '../data/pricingData';
 import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2, ShieldCheck, Zap, ShoppingCart, Rocket, Info } from 'lucide-react';
+import { staticWebPreview, dynamicCmsPreview, ecommercePreview } from '../assets/images';
 
 interface PricingCardsProps {
   currency: Currency;
@@ -48,10 +49,12 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
             {/* Digital Photo Preview */}
             <div className="mt-4 rounded-lg overflow-hidden border border-slate-700/80 aspect-[4/3] relative group bg-[#060e20]">
               <img
-                src="/src/assets/images/static_web_preview_1792431342756.jpg"
+                src={staticWebPreview}
                 alt="Static Portfolio & Restaurant Website Preview"
-                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/static_web_preview_1792431342756.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#060e20] via-transparent to-transparent opacity-80"></div>
               <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] font-mono text-white">
@@ -205,10 +208,12 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
             {/* Digital Photo Preview */}
             <div className="mt-4 rounded-lg overflow-hidden border border-indigo-500/40 aspect-[4/3] relative group bg-[#060e20]">
               <img
-                src="/src/assets/images/dynamic_cms_preview_1792431344267.jpg"
+                src={dynamicCmsPreview}
                 alt="Dynamic Website Admin CMS Dashboard Preview"
-                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/dynamic_cms_preview_1792431344267.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#060e20] via-transparent to-transparent opacity-80"></div>
               <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] font-mono text-white">
@@ -359,10 +364,12 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
             {/* Digital Photo Preview */}
             <div className="mt-4 rounded-lg overflow-hidden border border-emerald-500/30 aspect-[4/3] relative group bg-[#060e20]">
               <img
-                src="/src/assets/images/ecommerce_preview_1792431344885.jpg"
+                src={ecommercePreview}
                 alt="E-Commerce Store Dual Screen Preview"
-                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/ecommerce_preview_1792431344885.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#060e20] via-transparent to-transparent opacity-80"></div>
               <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] font-mono text-white">

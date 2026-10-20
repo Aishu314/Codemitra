@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_BLUEPRINTS, PortfolioItem } from '../data/pricingData';
+import { staticWebPreview, dynamicCmsPreview, ecommercePreview } from '../assets/images';
 
 interface PortfolioModalProps {
   isOpen: boolean;
@@ -75,7 +76,31 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
               </span>
             </div>
 
-            <h3 className="text-xl font-bold text-white mt-2">{activeProject.name}</h3>
+            {/* Showcase Image Banner */}
+            <div className="mt-3 rounded-lg overflow-hidden border border-slate-700/80 aspect-[16/9] relative bg-[#060e20]">
+              <img
+                src={
+                  activeProject.category === 'Static'
+                    ? staticWebPreview
+                    : activeProject.category === 'Dynamic CMS'
+                    ? dynamicCmsPreview
+                    : ecommercePreview
+                }
+                alt={activeProject.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    activeProject.category === 'Static'
+                      ? '/images/static_web_preview_1792431342756.jpg'
+                      : activeProject.category === 'Dynamic CMS'
+                      ? '/images/dynamic_cms_preview_1792431344267.jpg'
+                      : '/images/ecommerce_preview_1792431344885.jpg';
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#060e20] via-transparent to-transparent opacity-60"></div>
+            </div>
+
+            <h3 className="text-xl font-bold text-white mt-3">{activeProject.name}</h3>
             <p className="text-xs sm:text-sm text-[#c7c4d8] mt-1">{activeProject.tagline}</p>
             <p className="text-xs sm:text-sm text-[#dae2fd] mt-3 leading-relaxed">
               {activeProject.description}

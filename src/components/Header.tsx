@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { codemitraIcon } from '../assets/images';
 
 interface HeaderProps {
   currentTab: string;
@@ -74,8 +75,11 @@ export const Header: React.FC<HeaderProps> = ({
                 <img
                   alt="Code Mitra Digital Logo"
                   className="w-full h-full object-cover"
-                  src="/src/assets/images/codemitra_icon_1792431879490.jpg"
-                  referrerPolicy="no-referrer"
+                  src={codemitraIcon}
+                  onError={(e) => {
+                    // Fallback to public asset if needed
+                    e.currentTarget.src = '/codemitra_icon.jpg';
+                  }}
                 />
               </motion.div>
 

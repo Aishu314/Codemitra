@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Key, Check, Copy, ExternalLink, ShieldCheck, Terminal as TerminalIcon, FileCode, CheckCircle2 } from 'lucide-react';
+import { gitHandoverPreview } from '../assets/images';
 
 interface SourceHandoverSectionProps {
   onOpenNdaModal: () => void;
@@ -154,10 +155,12 @@ NEXT_PUBLIC_APP_URL="https://yourbrand.com"`;
             {/* Digital Photo Preview */}
             <div className="rounded-xl overflow-hidden border border-slate-700/80 aspect-[16/9] relative group bg-[#060e20] shadow-xl">
               <img
-                src="/src/assets/images/git_handover_preview_1792431346200.jpg"
+                src={gitHandoverPreview}
                 alt="Git Source Code Repository Handover Terminal"
-                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/git_handover_preview_1792431346200.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#060e20] via-transparent to-transparent opacity-75"></div>
               <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-white">
